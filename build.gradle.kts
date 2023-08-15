@@ -27,6 +27,13 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	// MAPPERS
+	implementation ("org.mapstruct:mapstruct:1.5.2.Final")
+	kapt("org.mapstruct:mapstruct-processor:1.5.3.Final")
+	annotationProcessor ("org.mapstruct:mapstruct:1.5.2.Final")
+
+
 }
 
 tasks.withType<KotlinCompile> {
