@@ -8,7 +8,7 @@ VALUES
 
 /** PLAYERS **/
 INSERT INTO public.player
-    (id, first_name, stats_id)
+    (id, name, stats_id)
 VALUES
     (1, 'Miguel Sánchez', 1),
     (2, 'Alejandro Rodriguez', 2),

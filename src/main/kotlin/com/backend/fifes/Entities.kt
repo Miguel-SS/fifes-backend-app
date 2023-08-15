@@ -129,12 +129,11 @@ data class Privilege(
 @Table(name = "player")
 data class Player(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    @Column(name="first_name")
-    var firstName: String? = null,
+    var name: String? = null,
     @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "stats_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "stats_id", nullable = true, referencedColumnName = "id")
     var stats: Stats? = null
 ) {
     override fun equals(other: Any?): Boolean {
@@ -153,7 +152,7 @@ data class Player(
     }
 
     override fun toString(): String {
-        return "Player(id=$id, name=$firstName, stats=$stats)"
+        return "Player(id=$id, name=$name, stats=$stats)"
     }
 
 }
@@ -162,7 +161,7 @@ data class Player(
 @Table(name = "stats")
 data class Stats(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     var attack: Long? = 0,
     var defense: Long? = 0,
