@@ -8,7 +8,7 @@ import javax.persistence.*
 class User (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
+    var id: Long? = null,
     @Column(name = "first_name")
     var firstName: String? = null,
     @Column(name = "last_name")
@@ -56,7 +56,7 @@ class User (
 data class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
+    var id: Long? = null,
     var name: String? = null,
     // Entity Relationship
     @ManyToMany
@@ -94,7 +94,7 @@ data class Role(
 data class Privilege(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
+    var id: Long? = null,
     var name: String,
     // Entity Relationship
     @ManyToMany(mappedBy = "roleList", fetch = FetchType.LAZY)
@@ -130,9 +130,10 @@ data class Privilege(
 data class Player(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
-    var name: String? = null,
-    @OneToOne
+    var id: Long? = null,
+    @Column(name="first_name")
+    var firstName: String? = null,
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "stats_id", nullable = false, referencedColumnName = "id")
     var stats: Stats? = null
 ) {
@@ -152,17 +153,17 @@ data class Player(
     }
 
     override fun toString(): String {
-        return "Player(id=$id, name=$name, stats=$stats)"
+        return "Player(id=$id, name=$firstName, stats=$stats)"
     }
 
 }
 
 @Entity
-@Table(name = "Stats")
+@Table(name = "stats")
 data class Stats(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
+    var id: Long? = null,
     var attack: Long? = 0,
     var defense: Long? = 0,
     var stamina: Long? = 0
