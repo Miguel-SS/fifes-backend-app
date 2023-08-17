@@ -14,6 +14,12 @@ interface PlayerService {
     fun findAll(): Set<PlayerResult>?
 
     /**
+     * Find all Players with the ids
+     * @return list
+     */
+    fun findAllById(players: List<Long>): Set<PlayerResult>?
+
+    /**
      * Get one Player by id
      * @param id of the Player
      * @return the Player found
@@ -53,6 +59,12 @@ class AbstractPlayerService(
     override fun findAll(): Set<PlayerResult>? {
         return playerMapper.playerListToPlayerResultList(
             playerRepository.findAll()
+        )
+    }
+
+    override fun findAllById(players: List<Long>): Set<PlayerResult>? {
+        return playerMapper.playerListToPlayerResultList(
+            playerRepository.findAllById(players)
         )
     }
 

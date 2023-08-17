@@ -16,14 +16,23 @@ class PlayerController(private val playerService: PlayerService) {
     fun findAll() = playerService.findAll()
 
     /**
-     * WS to find one Player by the id
-     * @param id to find Player
-     * @return the Player found
+     * WS to fin all elements of type Player by id
+     * @return A List of elements of type Player
      */
     @Throws(NoSuchElementException::class)
-    @GetMapping("{id}")
+    @GetMapping("{playersId}")
     @ResponseBody
-    fun findById(@PathVariable id: Long) = playerService.findById(id)
+    fun findAllById(@PathVariable playersId: List<Long>) = playerService.findAllById(playersId)
+
+    // /**
+    // * WS to find one Player by the id
+    // * @param id to find Player
+    // * @return the Player found
+    // */
+    // @Throws(NoSuchElementException::class)
+    // @GetMapping("{id}")
+    // @ResponseBody
+    // fun findById(@PathVariable id: Long) = playerService.findById(id)
 
     /**
      * WS to create a Player
