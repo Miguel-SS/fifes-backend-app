@@ -1,5 +1,6 @@
 package com.backend.fifes
 
+import org.hibernate.annotations.GenericGenerator
 import java.util.*
 import javax.persistence.*
 
@@ -7,7 +8,7 @@ import javax.persistence.*
 @Table(name="users")
 class User (
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @Column(name = "first_name")
     var firstName: String? = null,
@@ -55,7 +56,7 @@ class User (
 @Table(name = "role")
 data class Role(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     var name: String? = null,
     // Entity Relationship
@@ -93,7 +94,7 @@ data class Role(
 @Table(name = "privilege")
 data class Privilege(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     var name: String,
     // Entity Relationship
