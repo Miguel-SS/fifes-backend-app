@@ -9,7 +9,7 @@ import org.springframework.test.context.jdbc.Sql
 import java.util.*
 import javax.transaction.Transactional
 
-@Profile ("local")
+@Profile ("test")
 
 @Transactional
 @SpringBootTest
@@ -66,6 +66,12 @@ class LoadInitData (
         Assertions.assertTrue(user.get().id?.toInt() == 1)
     }
 
+    @Test
+    fun findAllPlayersById() {
+        val playersId: List<Long> = listOf(1,3)
+        Assertions.assertTrue(playerRepository.findAllById(playersId).size == 2)
+    }
+
 
     // ***************** CREATE *****************
     @Test
@@ -73,17 +79,17 @@ class LoadInitData (
         val stats = Stats(null, 15, 15, 15)
         val player = Player(null, "Pablo Montagnini", stats)
         val playerCreated = playerRepository.save(player)
-        Assertions.assertTrue(playerCreated.firstName == "Pablo Montagnini")
+        Assertions.assertTrue(playerCreated.name == "Pablo Montagnini")
     }
 
     // ***************** UPDATE *****************
     @Test
     fun updatePlayer() {
         val playerUpdate: Player = playerRepository.findAll()[0]
-        playerUpdate.firstName = "Miguel Salas"
+        playerUpdate.name = "Miguel Salas"
         playerRepository.save(playerUpdate)
         val newPlayerUpdate: Optional<Player> = playerRepository.findById(playerUpdate.id!!)
-        Assertions.assertTrue(newPlayerUpdate.get().firstName == "Miguel Salas")
+        Assertions.assertTrue(newPlayerUpdate.get().name == "Miguel Salas")
     }
 
     @Test
