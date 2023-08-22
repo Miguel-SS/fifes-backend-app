@@ -1,7 +1,10 @@
 package com.backend.fifes
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.convert.ThreeTenBackPortConverters.DateToInstantConverter
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.jvm.Throws
@@ -17,7 +20,7 @@ interface PlayerService {
      * Find all Players with the ids
      * @return list
      */
-    fun findAllById(players: List<Long>): Set<PlayerResult>?
+    fun findAllById(players: List<Long>): Pair<Set<PlayerResult>, Set<PlayerResult>>?
 
     /**
      * Get one Player by id
@@ -62,10 +65,24 @@ class AbstractPlayerService(
         )
     }
 
-    override fun findAllById(players: List<Long>): Set<PlayerResult>? {
-        return playerMapper.playerListToPlayerResultList(
-            playerRepository.findAllById(players)
-        )
+    override fun findAllById(players: List<Long>): Pair<Set<PlayerResult>, Set<PlayerResult>>? {
+        val playersList: MutableList<Player> = playerRepository.findAllById(players)
+
+        playersList.sortByDescending { it.stats?.overall }
+
+        var teamOne: MutableSet<PlayerResult> = mutableSetOf()
+        var teamTwo: MutableSet<PlayerResult> = mutableSetOf()
+
+        val playersIterator = playerMapper.playerListToPlayerResultList(playersList).iterator()
+        while (playersIterator.hasNext()) {
+            teamOne.add(playersIterator.next())
+            if(playersIterator.hasNext()) teamTwo.add(playersIterator.next())
+        }
+
+        teamOne = teamOne.shuffled(kotlin.random.Random(LocalTime.now().second)).toMutableSet()
+        teamTwo = teamTwo.shuffled(kotlin.random.Random(LocalTime.now().second)).toMutableSet()
+
+        return Pair(teamOne, teamTwo)
     }
 
     @Throws(NoSuchElementException::class)
@@ -77,6 +94,11 @@ class AbstractPlayerService(
 
     override fun create(playerInput: PlayerInput): PlayerResult? {
         val player: Player = playerMapper.playerInputToPlayer(playerInput)
+
+        if (player.stats != null) {
+            player.stats?.overall = player.stats?.attack?.plus(player.stats!!.defense!!)?.plus(player.stats!!.stamina!!)
+        }
+
         return playerMapper.playerToPlayerResult(
             playerRepository.save(player)
         )
@@ -88,11 +110,10 @@ class AbstractPlayerService(
         val playerUpdate: Player = player.get()
         playerMapper.playerInputToPlayer(playerInput, playerUpdate)
         if(playerInput.stats != null) {
-            val stats: Optional<Stats> = statsRepository.findById(playerInput.stats?.id!!)
-            if(stats.get().id != playerUpdate.stats?.id) {
-                // playerRepository.save(playerUpdate)
-                TODO("Test update")
-            }
+
+            playerUpdate.stats?.overall =
+                playerInput.stats?.attack?.plus(playerInput.stats!!.defense!!)?.plus(playerInput.stats!!.stamina!!)
+
         }
         return playerMapper.playerToPlayerResult(playerRepository.save(playerUpdate))
     }

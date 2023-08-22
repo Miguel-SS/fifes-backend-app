@@ -57,13 +57,13 @@ data class PlayerInput(
 data class PlayerResult(
     var id: Long,
     var name: String? = null,
-    var stats: Stats? = null
+    var stats: StatsDetails? = null
 )
 
 // -------------------- Stats entity --------------------
 data class StatsDetails(
     var id: Long? = null,
-    var attack: Long? = null,
-    var defense: Long? = null,
-    var stamina: Long? = null
+    var attack: Long? = 0,
+    var defense: Long? = 0,
+    var stamina: Long? = 0
 )

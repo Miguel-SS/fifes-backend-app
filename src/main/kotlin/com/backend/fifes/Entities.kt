@@ -166,7 +166,8 @@ data class Stats(
     var id: Long? = null,
     var attack: Long? = 0,
     var defense: Long? = 0,
-    var stamina: Long? = 0
+    var stamina: Long? = 0,
+    var overall: Long? = 0
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -184,7 +185,8 @@ data class Stats(
     }
 
     override fun toString(): String {
-        return "Stats(id=$id, attack=$attack, defense=$defense, stamina=$stamina)"
+        return "Stats(id=$id, attack=$attack, defense=$defense, stamina=$stamina, overall=$overall)"
     }
+
 
 }
